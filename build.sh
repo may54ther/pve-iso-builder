@@ -265,6 +265,24 @@ create_pkg(){
 
     chroot $targetdir/rootfs apt --download-only install -y  $main_pkg postfix squashfs-tools traceroute net-tools pci.ids pciutils efibootmgr xfsprogs fonts-liberation dnsutils $extra_pkg $grub_pkg gettext-base sosreport ethtool dmeventd eject chrony locales locales-all systemd rsyslog ifupdown2 ksmtuned zfsutils-linux zfs-zed spl btrfs-progs gdisk bash-completion zfs-initramfs dosfstools||errlog "download proxmox-ve package failed"
 
+	# ADDED: 2025-04-08, Use customized .deb files instead of defaults
+	script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+	custom_debs_dir="$script_dir/debs"
+	if [ -d "$custom_debs_dir" ]; then
+		for deb in "$custom_debs_dir"/*.deb; do
+			[ -f "$deb" ] || continue
+			pkg_name=$(dpkg-deb -f "$deb" Package)
+			pkg_ver=$(dpkg-deb -f "$deb" Version)
+			pkg_arch=$(dpkg-deb -f "$deb" Architecture)
+
+			if [ -n "$pkg_name" ] && [ -n "$pkg_ver" ] && [ -n "$pkg_arch" ]; then
+				dest_name="${pkg_name}_${pkg_ver}_${pkg_arch}.deb"
+				echo "Overwriting $dest_name with $deb"
+				cp -f "$deb" "$targetdir/rootfs/var/cache/apt/archives/$dest_name" || errlog "overwrite $pkg_name failed"
+			fi
+		done
+	fi	
+ 
     if [ ! -z "$extra_kernel" ] && [ "$PRODUCT" != "pbs" ] ;then
 	if [ "$target_arch" == "arm64"  ]  || [ "$target_arch" == "loong64"  ] ;then
         	chroot $targetdir/rootfs apt --download-only install -y  $extra_kernel ||errlog "kernel installed failed"
