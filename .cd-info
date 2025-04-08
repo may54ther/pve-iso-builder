@@ -9,6 +9,6 @@ mirrors="https://mirrors.ustc.edu.cn"
 # mirrors="http://deb.debian.org"							# Official
 # mirrors="http://ftp.kr.debian.org"						# KR
 pvemirrors="https://mirrors.ustc.edu.cn/proxmox/debian"
-# pvemirrors="http://download.proxmox.com/debian/pve"		# Official
+# pvemirrors="https://download.proxmox.com/debian"		# Official
 portmirrors="https://mirrors.lierfang.com/proxmox/debian" 
 	
