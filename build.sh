@@ -4,8 +4,8 @@ script_path=$(readlink -f "\$0")
 script_dir=$(dirname "$script_path")
 extra_pkg="ceph-common ceph-fuse"  #if you want install other package
 hostarch=`arch`     # This scripts only allow the same arch build.
-codename="bookworm"  # proxmox version. bookworm->pve8 ,bullseye->pve7
-targetdir="/tmp/targetdir" # tmpdir
+codename="bookworm"  # proxmox version. bookworm->pve8, bullseye->pve7
+targetdir="/tmp/proxmox-build"
 modules="hfs hfsplus cdrom sd_mod sr_mod loop squashfs iso9660 drm overlay uas hibmc-drm dw_drm_dsi kirin_drm amdgpu nouveau ast radeon virtio-gpu mgag200"
 
 # iso info
